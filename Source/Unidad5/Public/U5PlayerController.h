@@ -20,15 +20,15 @@ protected:
 	virtual void BeginPlay() override;
 
 	//Allow only lateral movement.
-	void Move(float value);
+	void Move(float Value);
 	
+
+	UCapsuleComponent* CapsuleComponent;
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
 	
 };
