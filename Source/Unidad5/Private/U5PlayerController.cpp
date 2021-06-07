@@ -2,6 +2,8 @@
 
 
 #include "U5PlayerController.h"
+#include "Components/CapsuleComponent.h"
+#include "Interactable.h"
 
 // Sets default values
 AU5PlayerController::AU5PlayerController()
@@ -9,6 +11,12 @@ AU5PlayerController::AU5PlayerController()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
+	TriggerCapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Trigger Capsule"));
+	TriggerCapsuleComponent->SetCollisionProfileName(TEXT("Trigger"));
+	TriggerCapsuleComponent->SetupAttachment(RootComponent);
+
+	TriggerCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &AU5PlayerController::OnTriggerStart);
+	TriggerCapsuleComponent->OnComponentEndOverlap.AddDynamic(this, &AU5PlayerController::OnTriggerEnd);
 }
 
 // Called when the game starts or when spawned
@@ -42,6 +50,24 @@ void AU5PlayerController::StopJumping()
 {
 	Super::StopJumping();
 	IsJumpButtonDown = false;
+}
+
+void AU5PlayerController::OnTriggerStart(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{		
+	IInteractable* Interactable = Cast<IInteractable>(OtherActor);
+	if (Interactable)
+	{		
+		IInteractable::Execute_OnFocusStart(OtherActor);	
+	}
+}
+
+void AU5PlayerController::OnTriggerEnd(UPrimitiveComponent* OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
+{	
+	IInteractable* Interactable = Cast<IInteractable>(OtherActor);
+	if (Interactable)
+	{	
+		IInteractable::Execute_OnFocusEnd(OtherActor);
+	}
 }
 
 // Called every frame

@@ -25,15 +25,23 @@ protected:
 	virtual void Jump() override;
 	virtual void StopJumping() override;
 
-	UCapsuleComponent* CapsuleComponent;
+	UFUNCTION()
+	void OnTriggerStart(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnTriggerEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	
 public:	
+	UPROPERTY(BlueprintReadOnly)
+	bool IsJumpButtonDown;
+
+	UPROPERTY(EditAnywhere, Category = "Triggers")
+	UCapsuleComponent* TriggerCapsuleComponent;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(BlueprintReadOnly)
-	bool IsJumpButtonDown;
 	
 };
