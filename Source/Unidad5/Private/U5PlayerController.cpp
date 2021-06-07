@@ -32,6 +32,18 @@ void AU5PlayerController::Move(float Value)
 	}
 }
 
+void AU5PlayerController::Jump()
+{
+	Super::Jump();
+	IsJumpButtonDown = true;
+}
+
+void AU5PlayerController::StopJumping()
+{
+	Super::StopJumping();
+	IsJumpButtonDown = false;
+}
+
 // Called every frame
 void AU5PlayerController::Tick(float DeltaTime)
 {
@@ -46,8 +58,8 @@ void AU5PlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 	PlayerInputComponent->BindAxis("MoveRight", this, &AU5PlayerController::Move);
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AU5PlayerController::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AU5PlayerController::StopJumping);
 
 }
 

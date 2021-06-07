@@ -22,6 +22,8 @@ protected:
 	//Allow only lateral movement.
 	void Move(float Value);
 	
+	virtual void Jump() override;
+	virtual void StopJumping() override;
 
 	UCapsuleComponent* CapsuleComponent;
 public:	
@@ -30,5 +32,8 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool IsJumpButtonDown;
 	
 };
