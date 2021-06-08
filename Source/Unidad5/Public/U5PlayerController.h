@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interactable.h"
 #include "U5PlayerController.generated.h"
 
 UCLASS()
@@ -16,6 +17,8 @@ public:
 	AU5PlayerController();
 
 protected:
+	IInteractable* CurrentInteractableOnFocus;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -30,12 +33,17 @@ protected:
 	UFUNCTION()
 	void OnTriggerEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
+	void Interact();
+	
 public:	
 	UPROPERTY(BlueprintReadOnly)
 	bool IsJumpButtonDown;
 
 	UPROPERTY(EditAnywhere, Category = "Triggers")
 	UCapsuleComponent* TriggerCapsuleComponent;
+
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* WeaponMesh;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -44,4 +52,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	
+	void EquipWeapon(UStaticMesh* NewWeaponMesh);
+
 };

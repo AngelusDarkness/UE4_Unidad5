@@ -24,7 +24,7 @@ class UNIDAD5_API IInteractable
 public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interactions")
-	void OnInteract(AActor* Caller);
+	void OnInteract(AActor* Caller);	
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Interactions")
 	void OnFocusStart();

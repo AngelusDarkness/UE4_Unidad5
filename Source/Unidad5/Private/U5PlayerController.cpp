@@ -17,7 +17,11 @@ AU5PlayerController::AU5PlayerController()
 
 	TriggerCapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &AU5PlayerController::OnTriggerStart);
 	TriggerCapsuleComponent->OnComponentEndOverlap.AddDynamic(this, &AU5PlayerController::OnTriggerEnd);
+
+	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));	
+	WeaponMesh->SetupAttachment(GetMesh(), TEXT("hand_rSocket"));
 }
+
 
 // Called when the game starts or when spawned
 void AU5PlayerController::BeginPlay()
@@ -58,6 +62,7 @@ void AU5PlayerController::OnTriggerStart(UPrimitiveComponent * OverlappedComp, A
 	if (Interactable)
 	{		
 		IInteractable::Execute_OnFocusStart(OtherActor);	
+		CurrentInteractableOnFocus = Interactable;
 	}
 }
 
@@ -67,6 +72,7 @@ void AU5PlayerController::OnTriggerEnd(UPrimitiveComponent* OverlappedComp, AAct
 	if (Interactable)
 	{	
 		IInteractable::Execute_OnFocusEnd(OtherActor);
+		CurrentInteractableOnFocus = nullptr;
 	}
 }
 
@@ -74,7 +80,7 @@ void AU5PlayerController::OnTriggerEnd(UPrimitiveComponent* OverlappedComp, AAct
 void AU5PlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 // Called to bind functionality to input
@@ -87,5 +93,23 @@ void AU5PlayerController::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AU5PlayerController::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &AU5PlayerController::StopJumping);
 
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &AU5PlayerController::Interact);
+}
+
+void AU5PlayerController::Interact()
+{
+	if (CurrentInteractableOnFocus) 
+	{
+		AActor* OriginalActor = Cast<AActor>(CurrentInteractableOnFocus);
+		if (OriginalActor) 
+		{
+			IInteractable::Execute_OnInteract(OriginalActor, this);
+		}		
+	}
+}
+
+void AU5PlayerController::EquipWeapon(UStaticMesh* NewWeaponMesh)
+{
+	WeaponMesh->SetStaticMesh(NewWeaponMesh);
 }
 
