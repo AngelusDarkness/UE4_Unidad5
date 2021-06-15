@@ -19,6 +19,8 @@ public:
 protected:
 	IInteractable* CurrentInteractableOnFocus;
 
+	
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -33,11 +35,14 @@ protected:
 	UFUNCTION()
 	void OnTriggerEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
-	void Interact();
+	void Interact();	
 	
 public:	
 	UPROPERTY(BlueprintReadOnly)
 	bool IsJumpButtonDown;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool CanMove;
 
 	UPROPERTY(EditAnywhere, Category = "Triggers")
 	UCapsuleComponent* TriggerCapsuleComponent;
@@ -45,13 +50,19 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;
 
+	UPROPERTY(EditAnywhere)
+	float CurrentHealth = 100;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void Respawn();
 	
 	void EquipWeapon(UStaticMesh* NewWeaponMesh);
+	void ReceiveDamage(float Damage);
 
 };

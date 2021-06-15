@@ -32,6 +32,11 @@ void AU5PlayerController::BeginPlay()
 
 void AU5PlayerController::Move(float Value)
 {
+	if (!CanMove)
+	{
+		return;
+	}
+
 	if ((Controller != nullptr) && (Value != 0.0f))
 	{
 		// find out which way is forward
@@ -46,12 +51,22 @@ void AU5PlayerController::Move(float Value)
 
 void AU5PlayerController::Jump()
 {
+	if (!CanMove)
+	{
+		return;
+	}
+
 	Super::Jump();
 	IsJumpButtonDown = true;
 }
 
 void AU5PlayerController::StopJumping()
 {
+	if (!CanMove)
+	{
+		return;
+	}
+
 	Super::StopJumping();
 	IsJumpButtonDown = false;
 }
@@ -108,8 +123,23 @@ void AU5PlayerController::Interact()
 	}
 }
 
+
 void AU5PlayerController::EquipWeapon(UStaticMesh* NewWeaponMesh)
 {
 	WeaponMesh->SetStaticMesh(NewWeaponMesh);
+}
+
+void AU5PlayerController::ReceiveDamage(float Damage)
+{
+	if (CurrentHealth <= 0) {
+		return;
+	}
+
+	CurrentHealth -= Damage;
+
+	if (CurrentHealth <= 0) 
+	{
+		Respawn();		
+	}
 }
 

@@ -3,6 +3,7 @@
 
 #include "WeaponPickup.h"
 #include "U5PlayerController.h"
+#include "CustomGameState.h"
 #include "Interactable.h"
 
 
@@ -13,6 +14,8 @@ AWeaponPickup::AWeaponPickup()
 	PrimaryActorTick.bCanEverTick = true;
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon"));
+
+	
 
 }
 
@@ -39,5 +42,9 @@ void AWeaponPickup::OnInteract_Implementation(AActor* Caller)
 		SetActorHiddenInGame(true);
 		PlayerController->EquipWeapon(WeaponMesh->GetStaticMesh());
 	}
+
+	
+	auto* GameState = GetWorld()->GetGameState<ACustomGameState>();
+	GameState->HandleItem();
 }
 
