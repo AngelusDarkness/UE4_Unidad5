@@ -50,8 +50,8 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;
 
-	UPROPERTY(EditAnywhere)
-	float CurrentHealth = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentHealth = 1;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
