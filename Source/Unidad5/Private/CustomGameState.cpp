@@ -13,7 +13,7 @@ void ACustomGameState::HandleDeaths()
 void ACustomGameState::HandleItem()
 {
 	ItemsCollected++;
-	ItemsChanged.Broadcast(ItemsCollected);
+	ItemsChanged.Broadcast(ItemsCollected);	
 }
 
 
